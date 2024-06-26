@@ -141,7 +141,7 @@ class LaunchCommand(CommandExtension):
             with open(args.launch_arguments_file, 'r') as file:
                 yaml_args = yaml.safe_load(file)
                 if isinstance(yaml_args, dict):
-                    for key, value in yaml_args.items():
+                    for key, value in yaml_args[args.launch_file_name].items():
                         launch_arguments.append(f"{key}:={value}")
                 else:
                     raise RuntimeError('The launch arguments file must contain a dictionary.')
