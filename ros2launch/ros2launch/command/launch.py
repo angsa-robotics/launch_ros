@@ -14,6 +14,7 @@
 
 import os
 import sys
+import yaml
 
 from ament_index_python.packages import PackageNotFoundError
 try:
@@ -102,6 +103,10 @@ class LaunchCommand(CommandExtension):
             help=('Regex pattern for filtering which executables the --launch-prefix is applied '
                   'to by matching the executable name.')
         )
+        parser.add_argument(
+            '--launch-arguments-file',
+            help='Path to a YAML file containing launch arguments'
+        )
         arg = parser.add_argument(
             'package_name',
             help='Name of the ROS package which contains the launch file')
@@ -132,6 +137,14 @@ class LaunchCommand(CommandExtension):
 
         path = None
         launch_arguments = []
+        if args.launch_arguments_file:
+            with open(args.launch_arguments_file, 'r') as file:
+                yaml_args = yaml.safe_load(file)
+                if isinstance(yaml_args, dict):
+                    for key, value in yaml_args.items():
+                        launch_arguments.append(f"{key}:={value}")
+                else:
+                    raise RuntimeError('The launch arguments file must contain a dictionary.')
         if mode == 'single file':
             # TODO(wjwwood): figure out how to have argparse and argcomplete
             # handle this, for now, hidden feature.
