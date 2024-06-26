@@ -104,8 +104,9 @@ class LaunchCommand(CommandExtension):
                   'to by matching the executable name.')
         )
         parser.add_argument(
-            '--launch-arguments-file',
-            help='Path to a YAML file containing launch arguments'
+            '--launch-arguments-files',
+            nargs='+',  # Allows one or more arguments to be passed
+            help='Paths to YAML files containing launch arguments'
         )
         arg = parser.add_argument(
             'package_name',
@@ -137,14 +138,22 @@ class LaunchCommand(CommandExtension):
 
         path = None
         launch_arguments = []
-        if args.launch_arguments_file:
-            with open(args.launch_arguments_file, 'r') as file:
-                yaml_args = yaml.safe_load(file)
-                if isinstance(yaml_args, dict):
-                    for key, value in yaml_args[args.launch_file_name].items():
-                        launch_arguments.append(f"{key}:={value}")
-                else:
-                    raise RuntimeError('The launch arguments file must contain a dictionary.')
+
+        if args.launch_arguments_files:
+            combined_yaml_args = {}
+            for arg_file in args.launch_arguments_files:
+                with open(arg_file, 'r') as file:
+                    yaml_args = yaml.safe_load(file)
+                    if isinstance(yaml_args, dict):
+                        # Merge the current file's arguments, overriding existing keys
+                        combined_yaml_args.update(yaml_args.get(args.launch_file_name, {}))
+                    else:
+                        raise RuntimeError('Each launch arguments file must contain a dictionary.')
+
+            # Construct launch_arguments from combined_yaml_args
+            for key, value in combined_yaml_args.items():
+                launch_arguments.append(f"{key}:={value}")
+
         if mode == 'single file':
             # TODO(wjwwood): figure out how to have argparse and argcomplete
             # handle this, for now, hidden feature.
