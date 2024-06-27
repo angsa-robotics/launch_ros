@@ -144,6 +144,8 @@ class LaunchCommand(CommandExtension):
             for arg_file in args.launch_arguments_files:
                 with open(arg_file, 'r') as file:
                     yaml_args = yaml.safe_load(file)
+                    if not yaml_args:
+                        continue
                     if isinstance(yaml_args, dict):
                         # Merge the current file's arguments, overriding existing keys
                         combined_yaml_args.update(yaml_args.get(args.launch_file_name, {}))
