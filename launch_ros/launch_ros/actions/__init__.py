@@ -25,6 +25,7 @@ from .ros_timer import ROSTimer
 from .ros_timer import ROSTimer as RosTimer
 from .set_parameter import SetParameter
 from .set_parameters_from_file import SetParametersFromFile
+from .set_parameters_from_files import SetParametersFromFiles
 from .set_remap import SetRemap
 from .set_ros_log_dir import SetROSLogDir
 from .set_use_sim_time import SetUseSimTime
@@ -42,6 +43,7 @@ __all__ = [
     'RosTimer',
     'SetParameter',
     'SetParametersFromFile',
+    'SetParametersFromFiles',
     'SetRemap',
     'SetROSLogDir',
     'SetUseSimTime'
