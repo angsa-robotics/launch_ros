@@ -5,7 +5,7 @@ package_name = 'launch_ros'
 
 setup(
     name=package_name,
-    version='0.26.5',
+    version='0.26.6',
     packages=find_packages(exclude=['test']),
     data_files=[
         ('share/' + package_name, ['package.xml']),
@@ -25,8 +25,8 @@ setup(
     author_email='william@osrfoundation.org',
     maintainer='Aditya Pande, Brandon Ong',
     maintainer_email='aditya.pande@openrobotics.org, brandon@openrobotics.org',
-    url='https://github.com/ros2/launch',
-    download_url='https://github.com/ros2/launch/releases',
+    url='https://github.com/ros2/launch_ros',
+    download_url='https://github.com/ros2/launch_ros/releases',
     keywords=['ROS'],
     classifiers=[
         'Intended Audience :: Developers',
